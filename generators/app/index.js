@@ -1,15 +1,23 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
+
 const AppGenerator = require('generator-jhipster/generators/app');
+
+const constants = require('generator-jhipster/lib/constants/priorities.cjs');
+
 const packagejs = require('../../package.json');
+
 const prompts = require('./prompts');
+
+
+const { INITIALIZING_PRIORITY, PROMPTING_PRIORITY, CONFIGURING_PRIORITY, COMPOSING_PRIORITY, LOADING_PRIORITY, PREPARING_PRIORITY, DEFAULT_PRIORITY, WRITING_PRIORITY, POST_WRITING_PRIORITY, END_PRIORITY } = constants;
 
 module.exports = class extends AppGenerator {
     constructor(args, opts) {
         super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
     }
 
-    get initializing() {
+    get [INITIALIZING_PRIORITY]() {
         const initPhaseFromJHipster = this._initializing();
 
         const dotnetInitAppPhaseSteps = {
@@ -82,13 +90,13 @@ module.exports = class extends AppGenerator {
                 this.namespace = this.jhipsterConfig.namespace;
                 this.applicationType = this.jhipsterConfig.applicationType;
                 this.serviceDiscoveryType = this.jhipsterConfig.serviceDiscoveryType;
-                const serverConfigFound = this.namespace !== undefined ;
+                const serverConfigFound = this.namespace !== undefined;
 
                 if (this.baseName !== undefined && serverConfigFound) {
                     this.log(
                         chalk.green(
                             'This is an existing project, using the configuration from your .yo-rc.json file \n' +
-                                'to re-generate the project...\n'
+                            'to re-generate the project...\n'
                         )
                     );
                     this.existingProject = true;
@@ -98,7 +106,7 @@ module.exports = class extends AppGenerator {
         return Object.assign(initPhaseFromJHipster, dotnetInitAppPhaseSteps);
     }
 
-    get prompting() {
+    get [PROMPTING_PRIORITY]() {
         return {
             askForModuleName: prompts.askForModuleName,
             askForApplicationType: prompts.askForApplicationType,
@@ -112,35 +120,35 @@ module.exports = class extends AppGenerator {
         };
     }
 
-    get configuring() {
+    get [CONFIGURING_PRIORITY]() {
         return super._configuring();
     }
 
-    get composing() {
+    get [COMPOSING_PRIORITY]() {
         return super._composing();
     }
 
-    get loading() {
+    get [LOADING_PRIORITY]() {
         return super._loading();
     }
 
-    get preparing() {
+    get [PREPARING_PRIORITY]() {
         return super._preparing();
     }
 
-    get default() {
+    get [DEFAULT_PRIORITY]() {
         return super._default();
-    }   
+    }
 
-    get writing() {
+    get [WRITING_PRIORITY]() {
         return super._writing();
     }
 
-    get postWriting() {
+    get [POST_WRITING_PRIORITY]() {
         return super._postWriting();
     }
 
-    get end() {
+    get [END_PRIORITY]() {
         // Here we are not overriding this phase and hence its being handled by JHipster
         return super._end();
     }
